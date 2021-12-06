@@ -1,0 +1,62 @@
+# -*- coding: UTF-8 -*-
+# @Time: 2021/2/18 20:09
+# @File: 基本MongonDB.py
+
+cmd操作
+1. 启动数据库服务
+在安装目录的bin目录下，执行 mongod.exe  --dbpath=E:\cui\tools\MongoDB\data2
+2. 连接数据库
+bin目录， 执行mongo.exe
+
+库操作
+1. 查看库信息
+show dbs
+2. 创建数据库
+use 数据库名(mydb)
+db.集合名.insert({name:"c",age:18})  # 这样才能看到该库
+3. 删除数据库
+db.dropDatabase()
+
+集合操作
+1. 查看集合信息
+show collections
+2. 创建集合
+db.createCollection("class") # 注意引号
+db.集合名.insert({name:"c",age:18})
+3. 删除集合
+db.集合名.drop()
+
+文档操作
+1. 插入
+db.集合名.insert([{},{}])
+db.集合名.save({_id:ObjectId("xxxx"),name:c,age:10})  如果带_id 则为更新
+2. 更新   第一个大括号为查询条件，第二个大括号为修改的地方 $set直接更新 $inc相加后在更新，第三个大括号为参数upset 如果没有数据是否更新
+multi 是否更新找到的多个文档
+db.集合名.update({name:"c"},{$set:{age:12}},{upset:true,multi:true})
+3. 删除 第一个{}条件，第二个参数justOne为，则只删除一个
+db.集合名.remove({name:"c"},{justOne:ture})
+4. 查询  第一个{}条件，为空查询全部，第二个{}展示的列,1表示显示
+db.集合名.find({name:"c"},{age:1})
+5. 查询操作符
+大于：$gt 小于：$lt  大于等于：$gte  小于等于：$lte
+db.集合名.find({age:{$gt:20}})  年龄大于20的数据
+db.集合名.find({age:{$gte:19},{$lte:22}}) 年龄大于等于19，小于等于22
+数据条数：count()
+db.student.find().count()
+查询name中带有c的数据：
+db.student.find({name:/c/})
+查询name以c开头的数据
+db.student.find(name:/^c/)
+and, or查询
+db.student.find($or:[{},{}])
+6. limit ,skip:跳过指定条数的数据, 联合使用实现分页
+db.student.skip(10).limit(10)
+7. sort()  按照age升序排列，降序-1
+db.student.find().sort({age:1})
+
+
+
+
+
+
+

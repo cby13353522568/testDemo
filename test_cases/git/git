@@ -1,0 +1,42 @@
+git config --global user.name "username"    //配置用户名("username"是自己的账户名)
+git config --global user.email "username@email.com"     //配置邮箱("username@email.com"注册账号时用的邮箱)
+git config --global --list // 查看配置
+
+创建本地仓库：
+cd 到想要创建仓库的目录
+git init     // 创建仓库 (工作区)
+git add test.txt    // 文件添加到仓库(缓存区)
+git commit -m "提交"   // 文件提交到仓库(版本库)
+git status   //  查看仓库状态，是否要修改
+git diff   // 查看修改内容
+git log   // 查看提交日志
+
+本地仓版本回退：
+git reset --hart HEAD^  //回退到上一版本
+git reset --hart HEAD^^   //回退到上两个版本
+git reset --hart HEAD~100 // 回退到上100个版本
+git reset --hard 具体版本号  // 回退到某一版本,版本可以通过log查看
+git reflog  // 查询每一次操作日志
+git checkout -- fileName // 撤销操作, 回到最后一次add或commit的状态
+
+创建远程仓：
+ssh -keygen -t rsa -C "835871924@qq.com"  // 生成公钥私钥
+去github 上设置公钥
+ssh -T git@github.com  // 校验是否设置成功
+在官网上create repository
+
+关联远程仓：
+git remote add origin 远程仓地址  // 官网clone
+git remote rm origin  // 删除关联
+git push origin master  // 推送到远程库(第一次推送master分支时，加上了 –u参数)
+git pull origin master  // 从远程库拉取
+git clone 远程库地址   //拉取项目
+touch .gitignore   // 创建.gitignore文件,写入不传的文件
+
+创建本地分支：
+git branch 分支名  //创建分支
+git branch   // 查看分支
+git checkout dev  // 切换分支
+git merge dev  // 将dev分支的代码合到master,合入前要先切换回master分支
+git branch -d 分支名  // 删除分支
+git push origin --delete 分支名  // 删除远程分支

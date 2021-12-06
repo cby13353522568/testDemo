@@ -1,0 +1,94 @@
+字段类型
+1.AutoField  主键
+2.CharField(max_length=字符长度)
+3.TextField 大文本，默认的form控件为Textarea
+4.IntegerField
+5.DecimalField(max_digits=位数总和, decimal_places=小数位)
+6.FloatField
+7.BooleanField
+8.DateField([auto_now=False,auto_now_add=False])  日期
+# 自动设置为当前时间  "最后一次修改" ，"创建时间"。两个参数不要同时使用
+9.TimeField 时间
+10.DateTimeField 日期时间都有
+11.FileField  上传文件
+12.ImageField
+
+字段属性
+CharField(null=True) 为空时以null存到数据库，默认时False
+CharField(blank) 允许字段为空白，默认为False
+db_column="age" 设置该字段在数据库中的字段名
+primary_key 设置为主键
+default 默认值
+unique 为True 则表中数据必须唯一
+
+对应关系
+models.ForeignKey("Grades",on_delete=models.CASCADE)
+
+元选项 在模型类中定位Meta类，用于设置元信息
+db_table="students" 数据表名，数据表名 默认为应用名_类名小写
+ordering=[id] 对象的默认排序字段，id前面带-为降序
+
+模型成员
+模型类的属性 objects (管理器),与数据库进行交互
+自定义管理器 stuObj = models.Manager()
+自定义管理器类 重写get_queryset()方法
+class StudentsManager(models.Manager): # 自定义管理器类
+    def get_queryset(self):  # 重写get_queryset方法
+        return super(StudentsManager,self).get_queryset().filter(isDelete=False)
+class Students(models.Model):
+    stuObj = models.Manager()  # 自定义模型管理器，替代objects
+    stuObj2 = StudentsManager()
+
+创建对象，向数据库添加数据
+对象的__init__方法在父类 models.Model中使用，自定义模型中无法使用
+方法：
+1. 在模型类中增加一个类方法
+#定义一个类方法创建对象
+@classmethod  # 代表类方法，这里的cls相当于Students
+def createStudent(cls,name,gender,age,content,grade,isDelete=False):     # 相当于createStudent(Students)
+    student = cls(sName=name, sGender=gender, sAge=age, sContent=content,sGrade=grade,isDelete=isDelete)
+    return student
+2. 在管理器中添加一个方法
+
+模型查询 从数据库中获取对象集合
+返回查询集的方法称为过滤器-- 相当于where
+1.在管理器上调用过滤器方法
+class StudentsManager(models.Manager): # 自定义管理器类
+def get_queryset(self):  # 重写get_queryset方法，过滤器
+    return super(StudentsManager,self).get_queryset().filter(isDelete=False).filter(sAge__gt=20)  # 支持链式
+2.filter(键=值，键=值)   filter(键=值).filter(键=值)  返回符合条件的数据
+3.exclude() 过滤掉符合条件的数据
+4.order_by()
+5.values() 返回一个列表[{name:'c',age:12},{},{}] 一条数据就是一个对象的字典
+all() 返回 [<Student1>,<Student2>,<>] 返回的是对象
+
+返回单个数据：
+1.get()  # 如果没找到符合条件的数据或找到多条数据，返回模型类报错
+2.count()
+3.first(),last()
+4.exists() #判断结果集是否有数据，有数据返回True
+
+限制查询集
+Students.stuObj.all()[0:5]  分页
+
+属性
+filter(),get() 的参数 ：
+1.属性名称__比较运算符=值
+2.studentList = Students.stuObj.filter(sName__contains="c")  # 名字中包含c
+3.startswith,endswith
+4.isnull, isnotnull
+5.in
+6.gt> gte>= lt< lte<=
+7.year,month,day,week_day,hour
+8.pk 代表主键
+9.maxAge = Students.stuObj.aggregate(Max('sAge')) # from django.db.models import Max
+10. # from django.db.model import F,Q
+grade = Grades.objects.filter(gGirlNum__gt=F('gBoyNum')) # 女生比男生多的班级，F对象
+11. 使用Q对象 解决or和！条件
+studentList = Stuents.stuObj.filter(Q(pk__lte=3) | Q(sAge__gt=20))
+studentList = Stuents.stuObj.filter(~Q(sAge__gt=20)) # 非
+12. grade = Grades.objects.filter(students__sContent__contains='c')
+# 学生表中sContent包含c的数据的对应班级
+
+Students.stuObj.get(pk=1).update(sName='bbb')
+Students.stuObj.get(pk=1).delete()

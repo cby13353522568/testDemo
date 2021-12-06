@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+<!--    <link rel="stylesheet" href="static/home.css">-->
+    <!--使用static_url参数来获取静态文件的路径-->
+    <link rel="stylesheet" href="{{static_url('home.css')}}">
+</head>
+<body>
+    <h2>姓名：{{username}}</h2>
+    <h3>{{detail["age"]}}</h3>
+
+    {% if flag == 0 %}
+    <h4>ok</h4>
+    {% elif flag ==1 %}
+    <h4>fail</h4>
+    {% else %}
+    <h4>pass</h4>
+    {% end %}
+
+    <ul>
+        {% for stu in stus%}
+        <li>{{stu["name"]}}</li>
+        {% end %}
+    </ul>
+
+    <h2>{{mySum(3,5)}}</h2>
+</body>
+</html>

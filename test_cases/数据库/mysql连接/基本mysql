@@ -1,0 +1,29 @@
+#启动mysql服务（管理员运行cmd）
+net start mysql
+#当前时间
+select now();
+#远程连接
+mysql -h ip地址 -u 用户名 -p
+
+数据库操作：
+1. create database 数据库名;
+2. drop database 数据库名；
+3. use 数据库名;
+4. select database();
+
+表操作：
+1. show tables; # 查看所有表
+2. create table 表名(列及类型);
+create table user(id int auto_increment primary key,name varchar(20) not null,
+age int not null, gender bit default 1,address varchar(20),isDelete bit default 0);
+3. drop table 表名;
+4. desc 表名;  # 查看表结构
+5. show create table 表名 # 展示建表语句
+6. rename table 原表名 to 新表名
+7. alter table 表名 add|change|drop column 列名 类型
+
+数据操作：
+1. insert into 表名(列1，列2) values(值1，值2);
+2. delete from 表名 where id=4; # 没有where 全部删除
+3. update 表名 set 列1=值1,列2=值2;  #没有条件全部修改
+4. select

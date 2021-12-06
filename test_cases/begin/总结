@@ -1,0 +1,18 @@
+import ast
+str = "{'id': '1', 'name': '1', 'grade': '96'}"
+ast.literal_eval(str)  将类似字典，列表的字符串转换为列表或字典
+
+python io  操作文件，存在覆盖、不存在修改这么一说，我们平时看到的修改文件，都是模拟出来的效果
+
+list中的元素 为字典时，排序可以用lambda函数
+list.sort(key=lambda x: x['grade'],reverse=False)
+
+import os
+print(os.getcwd())  # 获取当前工作目录路径
+print(os.path.abspath('.'))  # 获取当前工作目录路径
+os.path.exists(filename)  #文件是否存在
+
+pyinstaller -F 要打包的.py文件
+
+from pystrich.ean13 import EAN13Encoder
+import qrcode

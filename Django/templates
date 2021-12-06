@@ -1,0 +1,41 @@
+变量
+{{var}} 如果使用的变量不存在，插入空字符串
+{{stu.sName}} 对象.属性 或 对象.方法名 方法不能传递参数
+
+标签 {% tag %}
+1.{%if num%}语句块{%endif%}
+2.{%for var in list%}语句1{%empty%}语句2{%endfor%}
+列表为空或不存在执行语句2
+{{forloop.counter}} 表示循环第几次
+3.{%comment%}注释{%endcomment%}
+4.{%ifequal 值1 值2%}语句{%endifequal%}
+{%ifnotequal 值1 值2%}语句{%endifnotequal%}
+5.{%include '模板目录' 参数1 参数2%}{%endinclude%}
+加载模板并用标签内的参数渲染
+6.{%url "namespacename" 参数1 参数2%}{%endurl%}
+反向解析
+7.csrf_token 用于跨站请求伪造保护
+settings.py 中的csrf会把自己的请求也给过滤掉
+在表单下加 {%csrf_token%}
+8.模板继承
+block 在父模板中预留区域，子模板去填充
+{%block main%}{%endblock main%}  main为标签名
+extends 继承模板，写在模板文件第一行
+{%extends "MyApp/base.html"%} 模板路径
+9.autospace 用于html转义,code 的参数为html代码
+{%autoescape off%} {{code}} {%endautoescape%}
+{{code|safe}}
+
+过滤器 {{var | 过滤器}} 变量显示前修改
+{{student.sName|upper}}
+过滤器参数 join 拼接数组  default 设置默认值
+{{list|join:"#"}}
+{{test|default:"不存在"}}
+{{dateVar|date:"y-m-d"}}
+
+反向解析
+path('myapp/', include(('MyApp.urls', 'MyApp'), namespace="app"))
+path('login/s',views.login,name="login")
+<a href="{% url 'app:login' %}">反向解析登录</a>
+
+验证码

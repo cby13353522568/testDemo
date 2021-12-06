@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="{{url}}" method="post" enctype="multipart/form-data">
+        {% module xsrf_form_html() %}
+        姓名：<input type="text" name="username">
+        年龄：<input type="text" name="age">
+        密码：<input type="password" name="password">
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

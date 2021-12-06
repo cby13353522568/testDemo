@@ -1,0 +1,122 @@
+静态文件
+在settings.py 中配置,切记debug = True
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static')
+]
+{% load static %}
+<script src="{% static 'MyApp/js/c.js' %}" type="text/javascript"></script>
+
+中间件  python类
+方法：
+process_request(self,request) 分配url匹配视图时调用，返回None或HttpResponse
+process_view(self,view_func,view_args) 执行视图前调用，返回None或HttpResponse
+process_template_response(self,request) 渲染模板时调用，返回None或HttpResponse
+process_response(self,request,response) 响应返回浏览器时调用,返回HttpResponse对象
+process_exception(self,request,exception) 视图出现异常时调用，返回HttpResponse对象
+自定义中间件：
+创建middleware目录--MyApp目录
+from django.utils.deprecation import MiddlewareMixin
+class MyMiddle(MiddlewareMixin):
+    def process_request(self,request):
+        print("get参数为：",request.GET.get("a"))
+使用中间件 settings.py 配置
+MIDDLEWARE = [
+    'middleware.MyApp.myMiddle.MyMiddle'
+]
+
+上传文件
+文件存储在request.FILES属性中
+存储路径：static-upfile
+settings.py配置目录
+MEDIA_ROOT = os.path.join(BASE_DIR, r'static\upfile')
+form表单 需要用post方法，需要加属性 enctype="multipart/form-data"
+import os
+from django.conf import settings
+def upfile(request):
+    return render(request,'MyApp/upfile.html')
+def savefile(request):
+    if request.method == "POST":
+        f = request.FILES["file"]
+        # 文件在服务器存放的位置
+        filePath = os.path.join(settings.MEDIA_ROOT,f.name)
+        with open(filePath,'wb') as fp:
+            for info in f.chunks(): # 一段一段接收
+                fp.write(info)
+        return HttpResponse("上传成功")
+    else:
+        return HttpResponse("上传失败")
+
+分页
+Paginator对象
+Paginator([],int)  列表为获取的所有数据，int为一页展示几个
+属性：
+count 对象总数 num_pages 页面总数  page_range 页码列表
+方法：
+page(2) 返回page对象，如果提供的页码不存在，抛出InvalidPage异常
+Page对象
+属性：
+object_list 当前页所有数据的列表
+number 当前页的页码值
+paginator 当前page对象关联的paginator对象
+方法：
+has_next() 判断是否有下一页，如果有返回True
+has_previous() 判断是否有上一页
+has_other_pages() 判断是否有上一页或下一页
+next_page_number() 返回下一页页码，不存在返回InvalidPage异常
+previous_page_number() 返回上一页页码，不存在返回InvalidPage异常
+len() 返回当前页的数据个数
+from django.core.paginator import Paginator
+def studentpage(request,pageNum):
+    allList = Students.stuObj.all()
+    paginator = Paginator(allList,3)
+    page = paginator.page(pageNum)  # 第几页
+    print(page)
+    return render(request,'MyApp/students.html',{"students":page})
+
+ajax
+$(document).ready(function(){
+    console.log("a")
+    $("#btn").bind("click",function(){
+        $.ajax({
+            type:"get",
+            url:"/myapp/studentInfo/",
+            dateType:"json",
+            success: function(data,status){
+                var d = data["data"]
+                for(var i =0;i<d.length;i++){
+                    document.write('<p>'+d[i][0]+'</p>')
+            }
+        })
+    })
+})
+def studentInfo(request):
+    stus = Students.stuObj.all()
+    stuList = []
+    for stu in stus:
+        stuList.append([stu.sName,stu.sAge])
+    return JsonResponse({"data":stuList})
+
+富文本 pip install django-tinymce
+在站点中使用
+在settings.py INSTALLED_APPS 中添加'tinymce'
+在自定义视图中使用
+344 集
+
+celery
+解决问题：
+1. response 耗时久的操作单独提取
+2. 网页定时同步最新数据
+任务task，队列queue，工人worker，代理broker
+pip install celery
+pip install celery-redis
+pip install django-celery
+配置
+在settings.py INSTALLED_APPS 中添加'djcelery'
+import djcelery
+djcelery.setup_loader()  # 初始化
+BROKER_URL = 'redis://:cby@127.0.0.1:6379/0'
+CELERY_IMPORTS = ('MyApp.task')
+在应用目录下创建task.py文件
+迁移，生成celery需要的数据库表 python manage.py migrate
+在工程目录-HelloDjango目录下创建celery.py 文件
+在工程目录-HelloDjango目录下的__init__.py文件中添加
