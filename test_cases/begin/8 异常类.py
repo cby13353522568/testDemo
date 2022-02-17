@@ -13,6 +13,14 @@ except MyError as e:    #e是个对象，value和message是属性
     print("创建error:{}--{}".format(e.value,e.message))
 
 
+import traceback
+try:
+    print(1/0)
+except Exception as e:
+    print("error:", e)
+    traceback.print_exc(file=open("log.txt","w"))
+    print(traceback.format_exc())
+
 '''
 BaseException
  +-- SystemExit

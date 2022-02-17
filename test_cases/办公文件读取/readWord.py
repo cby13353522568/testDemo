@@ -5,6 +5,7 @@
 import win32com
 import win32com.client
 
+
 def readWord(path):
     word = win32com.client.Dispatch("Word.Application")
     doc = word.Documents.open(path)
@@ -15,5 +16,5 @@ def readWord(path):
     word.Quit()
 
 
-path=r"E:\cui\C_TEST\test_cases\办公文件读取\待办.doc"
+path = r"E:\cui\C_TEST\test_cases\办公文件读取\待办.doc"
 readWord(path)

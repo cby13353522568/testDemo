@@ -6,16 +6,16 @@
 # 语法错误，SyntaxError: invalid syntax （if后面没跟:等的问题）
 # 异常 try-expect-else-finally
 try:
-    print(10/0)
-except (ZeroDivisionError,NameError) as err0:    #一个except子句可以同时处理多个异常，这些异常将被放在一个括号里成为一个元组
-    #print("除数不能为0")
-    #pass
-    print("err0: {}".format(err0))   # 忽略异常的名称，它将被当作通配符使用
+    print(10 / 0)
+except (ZeroDivisionError, NameError) as err0:  # 一个except子句可以同时处理多个异常，这些异常将被放在一个括号里成为一个元组
+    # print("除数不能为0")
+    # pass
+    print("err0: {}".format(err0))  # 忽略异常的名称，它将被当作通配符使用
 except TypeError:
     print(1)
-else:     #try字句未发生异常时执行
+else:  # try字句未发生异常时执行
     print("没有异常")
-finally:     #不管是否发生异常最后都会走
+finally:  # 不管是否发生异常最后都会走
     print("异常被catch")
 
 # raise 抛出异常
@@ -30,4 +30,4 @@ except NameError:
     raise'''
 
 # 断言 判断表达式，false的时候 触发异常
-#assert 5>10   #相当于if not 5>10: raise AssertionError
+# assert 5>10   #相当于if not 5>10: raise AssertionError

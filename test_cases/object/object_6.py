@@ -2,7 +2,7 @@
 # @Time: 2020/12/24 22:34
 # @File: object_6.py
 
-#获取列表最小值
+# 获取列表最小值
 '''list=[1,2,3,4]
 print(min(list))
 
@@ -30,10 +30,10 @@ for value in values:
     print(keys[values.index(value)],value)  #index 方法返回元素在list中的索引
 '''
 
-#冒泡
-a=[3,2,5,7,1,4]
-for i in range(1,len(a)):
-    for j in range(0,len(a)-i):
-        if a[j]>a[j+1]:
-            a[j],a[j+1]=a[j+1],a[j]
+# 冒泡
+a = [3, 2, 5, 7, 1, 4]
+for i in range(1, len(a)):
+    for j in range(0, len(a) - i):
+        if a[j] > a[j + 1]:
+            a[j], a[j + 1] = a[j + 1], a[j]
     print(a)

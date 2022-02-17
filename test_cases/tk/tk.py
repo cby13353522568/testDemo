@@ -4,6 +4,7 @@ win = tkinter.Tk()
 win.title("标题")
 win.geometry("600x600+200+20")
 
+
 # 1.标签控件 text文本内容，bg背景色，fg字体颜色，wraplength文本text多宽换行, justify设置换行后的对齐方式，anchor 文本在lable中的位置 n北，s，w,e,center,ne
 label = tkinter.Label(win, text="hello", bg="pink", fg="red", font=("宋体",20), width=10, height=4, wraplength=30, justify="left", anchor="nw")
 label.pack()  #展示

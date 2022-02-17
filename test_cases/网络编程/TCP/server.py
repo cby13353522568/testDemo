@@ -11,7 +11,7 @@ server.listen(5)
 print("服务器启动成功")
 # 等待连接
 clientSocket, clientAddress = server.accept()
-print("{}{}连接成功".format(clientSocket,clientAddress))
+print("{}{}连接成功".format(clientSocket, clientAddress))
 # 接受数据,1024为1k
 while True:
     data = clientSocket.recv(1024)

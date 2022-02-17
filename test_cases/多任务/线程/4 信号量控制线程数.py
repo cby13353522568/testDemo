@@ -2,7 +2,7 @@
 # @Time: 2021/2/9 19:08
 # @File: 4 信号量控制线程数.py
 
-import threading,time
+import threading, time
 sem = threading.Semaphore(3)   # 控制一次性有几个线程能执行
 
 
