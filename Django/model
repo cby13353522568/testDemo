@@ -14,15 +14,15 @@
 12.ImageField
 
 字段属性
-CharField(null=True) 为空时以null存到数据库，默认时False
+CharField(null=True) 为空时以null存到数据库，默认是False
 CharField(blank) 允许字段为空白，默认为False
 db_column="age" 设置该字段在数据库中的字段名
-primary_key 设置为主键
+primary_key 设置为主键（默认生成主键）
 default 默认值
 unique 为True 则表中数据必须唯一
 
-对应关系
-models.ForeignKey("Grades",on_delete=models.CASCADE)
+对应关系 外键
+字段名 = models.ForeignKey("Grades",on_delete=models.CASCADE)
 
 元选项 在模型类中定位Meta类，用于设置元信息
 db_table="students" 数据表名，数据表名 默认为应用名_类名小写

@@ -2,7 +2,7 @@
 net start mysql
 #当前时间
 select now();
-#远程连接
+#远程连接   (bin目录下)
 mysql -h ip地址 -u 用户名 -p
 
 数据库操作：

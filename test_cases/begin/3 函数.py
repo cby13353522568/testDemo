@@ -47,3 +47,12 @@ print(x)
 
 dict = {x: x ** 2 for x in vec}
 print(dict)
+
+
+class Cat:
+    def __str__(self):   # 打印对象时会展示对象的介绍信息
+        print("对象介绍")
+    def drink(self):
+        print("1")
+cat = Cat()
+print(cat)
