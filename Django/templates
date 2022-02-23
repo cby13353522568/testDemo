@@ -1,41 +1,45 @@
 变量
 {{var}} 如果使用的变量不存在，插入空字符串
-{{stu.sName}} 对象.属性 或 对象.方法名 方法不能传递参数
+{{stu.sName}} 对象.属性 或 对象.方法名（这个方法是model对象的方法 eg:getName） 方法不能传递参数
 
 标签 {% tag %}
-1.{%if num%}语句块{%endif%}
+1.{%if 表达式%}语句块{%endif%}
+{%if 表达式%}语句块1{%elif 表达式2%}语句2{%else%}语句3{%endif%}
 2.{%for var in list%}语句1{%empty%}语句2{%endfor%}
 列表为空或不存在执行语句2
-{{forloop.counter}} 表示循环第几次
+{{forloop.counter}} 表示当前是循环第几次，在for循环中用
 3.{%comment%}注释{%endcomment%}
-4.{%ifequal 值1 值2%}语句{%endifequal%}
+{#注释内容#}
+4.{%ifequal 值1 值2%}语句{%endifequal%}   值1=值2 则执行语句
 {%ifnotequal 值1 值2%}语句{%endifnotequal%}
 5.{%include '模板目录' 参数1 参数2%}{%endinclude%}
 加载模板并用标签内的参数渲染
-6.{%url "namespacename" 参数1 参数2%}{%endurl%}
-反向解析
+6.{%url "namespace:name" 参数1 参数2%}{%endurl%}  反向解析 "{%url 'jdApp:shop' foodtype.typeid 0 0%}"
 7.csrf_token 用于跨站请求伪造保护
 settings.py 中的csrf会把自己的请求也给过滤掉
 在表单下加 {%csrf_token%}
 8.模板继承
 block 在父模板中预留区域，子模板去填充
-{%block main%}{%endblock main%}  main为标签名
+{%block 标签名%}{%endblock 标签名%}  main为标签名
 extends 继承模板，写在模板文件第一行
 {%extends "MyApp/base.html"%} 模板路径
-9.autospace 用于html转义,code 的参数为html代码
+9.autospace 用于html转义,view返回的参数code 为html代码。2种方法
 {%autoescape off%} {{code}} {%endautoescape%}
+{%autoescape on%} {{code}} {%endautoescape%}
 {{code|safe}}
 
-过滤器 {{var | 过滤器}} 变量显示前修改
+过滤器 {{var | 过滤器}}  作用：变量显示前修改
 {{student.sName|upper}}
 过滤器参数 join 拼接数组  default 设置默认值
 {{list|join:"#"}}
-{{test|default:"不存在"}}
+{{test|default:"不存在"}}    # 变量未提供，为空或未False时，则使用默认值
 {{dateVar|date:"y-m-d"}}
+{{num|add:-10}}  # 加减
 
 反向解析
 path('myapp/', include(('MyApp.urls', 'MyApp'), namespace="app"))
 path('login/s',views.login,name="login")
 <a href="{% url 'app:login' %}">反向解析登录</a>
 
-验证码
+验证码  注册登录时，可以防止暴力请求
+

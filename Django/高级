@@ -6,11 +6,11 @@ STATICFILES_DIRS = [
 {% load static %}
 <script src="{% static 'MyApp/js/c.js' %}" type="text/javascript"></script>
 
-中间件  python类
-方法：
+中间件  相当于引用python类
+方法：执行时所有中间件(各个类)都会执行下列方法
 process_request(self,request) 分配url匹配视图时调用，返回None或HttpResponse
 process_view(self,view_func,view_args) 执行视图前调用，返回None或HttpResponse
-process_template_response(self,request) 渲染模板时调用，返回None或HttpResponse
+process_template_response(self,request,response) 渲染模板时调用，返回None或HttpResponse
 process_response(self,request,response) 响应返回浏览器时调用,返回HttpResponse对象
 process_exception(self,request,exception) 视图出现异常时调用，返回HttpResponse对象
 自定义中间件：
@@ -18,7 +18,7 @@ process_exception(self,request,exception) 视图出现异常时调用，返回Ht
 from django.utils.deprecation import MiddlewareMixin
 class MyMiddle(MiddlewareMixin):
     def process_request(self,request):
-        print("get参数为：",request.GET.get("a"))
+        print("get参数为：",request.GET.get("a"))  # 所有请求调用时都会调该方法打印a的值
 使用中间件 settings.py 配置
 MIDDLEWARE = [
     'middleware.MyApp.myMiddle.MyMiddle'
@@ -29,6 +29,7 @@ MIDDLEWARE = [
 存储路径：static-upfile
 settings.py配置目录
 MEDIA_ROOT = os.path.join(BASE_DIR, r'static\upfile')
+
 form表单 需要用post方法，需要加属性 enctype="multipart/form-data"
 import os
 from django.conf import settings
@@ -47,13 +48,13 @@ def savefile(request):
         return HttpResponse("上传失败")
 
 分页
-Paginator对象
+1.Paginator对象
 Paginator([],int)  列表为获取的所有数据，int为一页展示几个
 属性：
 count 对象总数 num_pages 页面总数  page_range 页码列表
 方法：
 page(2) 返回page对象，如果提供的页码不存在，抛出InvalidPage异常
-Page对象
+2.Page对象
 属性：
 object_list 当前页所有数据的列表
 number 当前页的页码值
@@ -69,8 +70,7 @@ from django.core.paginator import Paginator
 def studentpage(request,pageNum):
     allList = Students.stuObj.all()
     paginator = Paginator(allList,3)
-    page = paginator.page(pageNum)  # 第几页
-    print(page)
+    page = paginator.page(pageNum)  # pageNum是传进来的第几页， page就是当前页的学生列表
     return render(request,'MyApp/students.html',{"students":page})
 
 ajax
@@ -116,7 +116,9 @@ import djcelery
 djcelery.setup_loader()  # 初始化
 BROKER_URL = 'redis://:cby@127.0.0.1:6379/0'
 CELERY_IMPORTS = ('MyApp.task')
-在应用目录下创建task.py文件
+在应用目录下创建task.py文件，在这里写耗时操作
+from celery import task
 迁移，生成celery需要的数据库表 python manage.py migrate
-在工程目录-HelloDjango目录下创建celery.py 文件
+在工程目录-HelloDjango目录下创建celery.py 文件(内容是写好的)
 在工程目录-HelloDjango目录下的__init__.py文件中添加
+from .celery import app as celery_app

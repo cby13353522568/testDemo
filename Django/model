@@ -1,7 +1,7 @@
 字段类型
 1.AutoField  主键
 2.CharField(max_length=字符长度)
-3.TextField 大文本，默认的form控件为Textarea
+3.TextField 大文本，默认的form控件为Textarea(一般超过4000采用)
 4.IntegerField
 5.DecimalField(max_digits=位数总和, decimal_places=小数位)
 6.FloatField
@@ -17,6 +17,7 @@
 CharField(null=True) 为空时以null存到数据库，默认是False
 CharField(blank) 允许字段为空白，默认为False
 db_column="age" 设置该字段在数据库中的字段名
+db_index  若为True,则为该字段添加索引
 primary_key 设置为主键（默认生成主键）
 default 默认值
 unique 为True 则表中数据必须唯一
@@ -30,7 +31,7 @@ ordering=[id] 对象的默认排序字段，id前面带-为降序
 
 模型成员
 模型类的属性 objects (管理器),与数据库进行交互
-自定义管理器 stuObj = models.Manager()
+自定义管理器 stuObj = models.Manager() 自定义后不自动生成objects, 需要配合自定义管理器类使用
 自定义管理器类 重写get_queryset()方法
 class StudentsManager(models.Manager): # 自定义管理器类
     def get_queryset(self):  # 重写get_queryset方法
@@ -40,8 +41,7 @@ class Students(models.Model):
     stuObj2 = StudentsManager()
 
 创建对象，向数据库添加数据
-对象的__init__方法在父类 models.Model中使用，自定义模型中无法使用
-方法：
+方法： (对象的__init__方法在父类 models.Model中使用，自定义模型中无法使用)
 1. 在模型类中增加一个类方法
 #定义一个类方法创建对象
 @classmethod  # 代表类方法，这里的cls相当于Students
@@ -49,6 +49,10 @@ def createStudent(cls,name,gender,age,content,grade,isDelete=False):     # 相�
     student = cls(sName=name, sGender=gender, sAge=age, sContent=content,sGrade=grade,isDelete=isDelete)
     return student
 2. 在管理器中添加一个方法
+def createStudent(self,xxx,xxx):
+    stu = self.model()
+    stu.xxx = xxx
+    return stu
 
 模型查询 从数据库中获取对象集合
 返回查询集的方法称为过滤器-- 相当于where
@@ -64,16 +68,17 @@ all() 返回 [<Student1>,<Student2>,<>] 返回的是对象
 
 返回单个数据：
 1.get()  # 如果没找到符合条件的数据或找到多条数据，返回模型类报错
-2.count()
-3.first(),last()
+2.count()   # 结果集个数
+3.first(),last()  # 返回结果集中的第一个或最后一个对象
 4.exists() #判断结果集是否有数据，有数据返回True
 
 限制查询集
 Students.stuObj.all()[0:5]  分页
+Students.stuObj.all()[(page-1)*5:page*5]  分页
 
 属性
-filter(),get() 的参数 ：
-1.属性名称__比较运算符=值
+filter(),exclude(),get() 的参数 ：
+1.属性名称__比较运算符=值    外键：属性名_id
 2.studentList = Students.stuObj.filter(sName__contains="c")  # 名字中包含c
 3.startswith,endswith
 4.isnull, isnotnull
@@ -81,7 +86,8 @@ filter(),get() 的参数 ：
 6.gt> gte>= lt< lte<=
 7.year,month,day,week_day,hour
 8.pk 代表主键
-9.maxAge = Students.stuObj.aggregate(Max('sAge')) # from django.db.models import Max
+9.聚合函数： 使用aggregate()方法返回聚合函数的值 ,聚合函数有max，min，count，sum等
+maxAge = Students.stuObj.aggregate(Max('sAge')) # from django.db.models import Max
 10. # from django.db.model import F,Q
 grade = Grades.objects.filter(gGirlNum__gt=F('gBoyNum')) # 女生比男生多的班级，F对象
 11. 使用Q对象 解决or和！条件
