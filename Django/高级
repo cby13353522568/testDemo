@@ -107,18 +107,45 @@ celery
 1. response 耗时久的操作单独提取
 2. 网页定时同步最新数据
 任务task，队列queue，工人worker，代理broker
-pip install celery
-pip install celery-redis
-pip install django-celery
-配置
-在settings.py INSTALLED_APPS 中添加'djcelery'
-import djcelery
-djcelery.setup_loader()  # 初始化
-BROKER_URL = 'redis://:cby@127.0.0.1:6379/0'
-CELERY_IMPORTS = ('MyApp.task')
-在应用目录下创建task.py文件，在这里写耗时操作
-from celery import task
-迁移，生成celery需要的数据库表 python manage.py migrate
-在工程目录-HelloDjango目录下创建celery.py 文件(内容是写好的)
-在工程目录-HelloDjango目录下的__init__.py文件中添加
+配置过程：
+1.settings.py
+CELERY_BROKER_URL = 'redis://:123456@127.0.0.1:6379/1'  # Broker配置，使用Redis作为消息中间件
+CELERY_RESULT_BACKEND = 'redis://:123456@127.0.0.1:6379/1'  # BACKEND配置，这里使用redis
+CELERY_RESULT_SERIALIZER = 'json' # 结果序列化方案
+2.项目目录的__init__.py
+from __future__ import absolute_import, unicode_literals
 from .celery import app as celery_app
+__all__ = ['celery_app']
+3.项目目录新增celery.py
+from __future__ import absolute_import, unicode_literals
+from celery import Celery
+from datetime import timedelta
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HelloDjango.settings')  # 设置django环境
+app = Celery('HelloDjango')
+app.config_from_object('django.conf:settings', namespace='CELERY')  # 使用CELERY_ 作为前缀，在settings中写配置
+app.autodiscover_tasks()  # 发现任务文件每个app下的task.py
+
+from celery.schedules import crontab    # 定时任务  pip install django_celery_beat  # 启动定时任务  celery -A 你的应用 beat
+app.conf.update(
+    CELERYBEAT_SCHEDULE={'sum-task': {'task': 'MyApp.tasks.add', 'schedule': timedelta(seconds=20), 'args': (5, 6)},
+                         'send-report': {'task': 'MyApp.tasks.report', 'schedule': crontab(hour=4, minute=30, day_of_week=1), }})
+4.在应用目录下新增tasks.py
+from __future__ import absolute_import, unicode_literals
+from celery import shared_task
+import time
+@shared_task
+def add(x, y):
+    time.sleep(10)
+    print("异步处理")
+    return x + y
+def report():
+    return "报告"
+5.view.py 中调用异步任务
+def showStudent(request):
+    students = User.objects.all()
+    res = tasks.add.delay(3, 5)  # 启动celery： celery -A HelloDjango worker -l info -P eventlet
+    # res.get()
+    return render(request, 'MyApp/Hello.html', {'students': students, 'task_id': res.task_id, 'task_result': res.result})
+6.在项目目录下 先启动celery -A 你的应用 beat  ，再启动celery -A 你的应用 worker -l -P eventlet， 最后启动项目
+
