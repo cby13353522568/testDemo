@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生</title>
+</head>
+<body>
+    <h1>{{task_id}}</h1>
+    <h1>{{task_result}}</h1>
+    {%for student in students%}
+
+    <ul>
+        <li>{{student.userName}}--{{student.userAddress}</li>
+    </ul>
+    {%endfor%}
+</body>
+</html>
