@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<info>
+    <fruit>
+        <apple>123</apple>
+        <bananer>bananer</bananer>
+    </fruit>
+    <food>
+        <chicken>chicken</chicken>
+        <chicken>big chicken</chicken>
+    </food>
+    <url>http</url>
+        <login username="aaa" pwd="123"/>
+        <login username="bbb" pwd="223"/>
+    <fruit>
+        <pine>pine</pine>
+    </fruit>
+</info>
