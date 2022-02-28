@@ -5,11 +5,11 @@ import threading
 import time
 
 def longIO(callback):
-    def run(cb):
+    def run(fun):
         print("耗时操作开始")
         time.sleep(5)
         print("耗时操作结束")
-        cb("异步返回数据")
+        fun("异步返回数据")
     threading.Thread(target=run,args=(callback,)).start()
 
 # 回调函数,可以类比ajax 当耗时操作又返回时

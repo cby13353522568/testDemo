@@ -11,6 +11,9 @@ print(os.access("file.txt", os.R_OK))
 # 返回当前工作目录
 print(os.getcwd())
 
+# 返回绝对路径
+print(os.path.abspath('.'))
+
 # 返回path指定的文件夹包含的文件或文件夹的名字的列表
 print(os.listdir("E:\cui\C_TEST"))
 
