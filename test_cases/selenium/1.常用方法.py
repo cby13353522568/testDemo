@@ -28,7 +28,7 @@ def run():
 
     driver.find_element_by_xpath('//*[@id="kw"]').submit()  # 相当于回车
 
-    driver.save_screenshot(os.getcwd())   # 截图
+    # driver.save_screenshot(os.getcwd())   # 截图
 
 
 

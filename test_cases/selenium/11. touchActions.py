@@ -1,5 +1,7 @@
 from selenium import webdriver
 from time import sleep
+
+
 opt = webdriver.ChromeOptions()
 opt.add_experimental_option('w3c', False)
 driver = webdriver.Chrome(r"C:\Program Files\Google\Chrome\Application\chromedriver.exe", options=opt)
