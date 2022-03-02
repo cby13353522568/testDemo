@@ -34,3 +34,9 @@ print("People 类的方法 hello 输出为：", x.hello("cby", 10))
 print(dir(builtins))  # 可以查看预定义了哪些变量
 print(dir(People))
 # 当内部作用域想修改外部作用域的变量时，就要用到global和nonlocal关键字了
+
+"""
+继承
+super(子类，self).__init__(参数1，参数2，....)
+父类名称.__init__(self,参数1，参数2，...)
+"""
