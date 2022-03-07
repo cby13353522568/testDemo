@@ -1,6 +1,9 @@
 from selenium import webdriver
 import time, os
 
+from selenium.webdriver.common.by import By
+
+
 def run():
     driver = webdriver.Chrome(r"C:\Program Files\Google\Chrome\Application\chromedriver.exe")
     # driver = webdriver.Chrome()   # 得把ChromeDriver添加到环境变量
@@ -19,6 +22,8 @@ def run():
     driver.find_element_by_xpath('//*[@id="kw"]').send_keys('你好')  # 输入
     # driver.find_element_by_xpath('//*[@id="su"]').click()     # 点击
     # driver.find_element_by_xpath('//*[@id="kw"]').clear()     # 清空
+    driver.find_element(By.ID,'kw').send_keys('o')
+    time.sleep(4)
 
     print(driver.find_element_by_xpath('//*[@id="kw"]').text)   # 获取元素文本
 

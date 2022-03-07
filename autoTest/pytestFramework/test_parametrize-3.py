@@ -3,7 +3,7 @@ import pytest
 
 # 第一个参数用来定义参数名称， 第二个参数每个元组都是一条测试数据， 第三个参数用来定义用例名称
 @pytest.mark.parametrize('a, b ,expected', [(1, 1, 2), (2, 2, 3), (3, 3, 6)], ids=['case1', 'case2', 'case3'])
-def test_add(a, b, expected):
+def test_add(test_login, a, b, expected):
     assert (a + b) == expected
 
 

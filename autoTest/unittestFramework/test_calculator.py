@@ -1,4 +1,4 @@
-from calculatorDemo import Calculator
+from .calculatorDemo import Calculator
 import unittest
 # TestCase, Test Suite 测试套件（组装要运行的测试，可以调整执行顺序）,
 # Test Runner 执行测试，返回测试结果, Test Fixture 提前准备和结束清理 setUp()/tearDown(),setUpClass()/tearDownClass()

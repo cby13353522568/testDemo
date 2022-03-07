@@ -1,4 +1,4 @@
-from calculatorDemo import Calculator
+from .calculatorDemo import Calculator
 import unittest
 
 

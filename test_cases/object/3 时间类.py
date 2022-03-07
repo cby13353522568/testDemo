@@ -32,5 +32,6 @@ today3 = datetime.datetime.strptime(today_str, "%Y=%m=%d")
 print(today3)
 
 d1 = datetime.date.today()
-d2 = datetime.date(2020, 11, 26)
-print((d1 - d2).days)
+d2 = datetime.date(2021, 4, 6)
+d3 = datetime.date(2022, 3, 4)
+print((d3 - d2).days)
